@@ -217,16 +217,9 @@ function calc() {
   const p = 1 / (1 + Math.exp(-Z));
   const risk = (p * 100).toFixed(1);
 
-  let classification = "";
-  if (p < 0.10) classification = lang === "pt" ? "Baixo risco" : "Low risk";
-  else if (p < 0.30) classification = lang === "pt" ? "Risco intermediário" : "Intermediate risk";
-  else classification = lang === "pt" ? "Alto risco" : "High risk";
-
   document.getElementById("result").innerHTML =
     (lang === "pt" ? "Risco estimado: " : "Estimated risk: ") +
-    "<strong>" + risk + "%</strong><br>" +
-    (lang === "pt" ? "Classificação: " : "Classification: ") +
-    "<strong>" + classification + "</strong>";
+    "<strong>" + risk + "%</strong>";
 }
 
 renderText();
