@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Arrhythmic Risk Calculator in Chagas Disease</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f5f7fa;
+      margin: 0;
+      color: #1f2933;
+    }
+
+    header {
+      background: #0f172a;
+      color: white;
+      padding: 30px;
+      text-align: center;
+      position: relative;
+    }
+
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      margin-bottom: 8px;
+    }
+
+    .lang-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #2563eb;
+      border: none;
+      color: white;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    main {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 40px 20px;
+    }
+
+    h2 {
+      margin-top: 40px;
+      border-bottom: 2px solid #e5e7eb;
+      padding-bottom: 5px;
+    }
+
+    p {
+      line-height: 1.6;
+    }
+
+    .box {
+      background: #f1f5f9;
+      border-left: 5px solid #dc2626;
+      padding: 15px;
+      margin: 20px 0;
+      font-weight: 500;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-top: 15px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin-top: 5px;
+    }
+
+    button.calc {
+      margin-top: 20px;
+      width: 100%;
+      padding: 14px;
+      background: #2563eb;
+      color: white;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .result {
+      margin-top: 25px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+      color: #475569;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <button class="lang-btn" onclick="toggleLang()">EN / PT</button>
+  <h1 id="title">Calculadora de Risco Arrítmico na Doença de Chagas</h1>
+  <p id="subtitle">Baseada em mecânica miocárdica por Speckle Tracking</p>
+</header>
+
+<main>
+
+  <h2 id="h1">O que é esta calculadora?</h2>
+  <p id="desc">
+    Esta calculadora estima a <strong>probabilidade percentual</strong> de um paciente com
+    <strong>Doença de Chagas</strong> apresentar um perfil ecocardiográfico semelhante ao de indivíduos
+    com <strong>substrato arrítmico significativo</strong>, tomando como referência pacientes
+    chagásicos com <strong>Cardiodesfibrilador Implantável (CDI) em prevenção secundária</strong>.
+  </p>
+
+  <div class="box" id="warn">
+    ⚠️ Esta calculadora é aplicável exclusivamente a pacientes com Doença de Chagas.
+    Não estabelece diagnóstico e não substitui julgamento clínico individualizado.
+  </div>
+
+  <h2 id="h2">Calculadora</h2>
+
+  <label id="lbl1">Massa do Ventrículo Esquerdo (g)</label>
+  <input type="number" id="massa" placeholder="Ex: 220">
+
+  <label id="lbl2">Dispersão Mecânica do VE (ms)</label>
+  <input type="number" id="disp" placeholder="Ex: 65">
+
+  <button class="calc" onclick="calc()">Calcular Risco</button>
+
+  <div class="result" id="result"></div>
+
+  <h2 id="h3">Fundamentação Científica</h2>
+  <p id="ref">
+    Ribeiro, Luiz Carlos Madruga. <em>Mecânica miocárdica avaliada por Speckle Tracking como marcador
+    prognóstico na cardiomiopatia chagásica.</em> Tese (Doutorado) – Programa de Cardiologia,
+    Faculdade de Medicina da Universidade de São Paulo (FMUSP). Orientadora: Profa. Dra. Ludhmila
+    Abrahão Hajjar. São Paulo, 2025.
+  </p>
+
+</main>
+
+<footer>
+  © Reprodução autorizada pelo autor – FMUSP 2025
+</footer>
+
+<script>
+let lang = "pt";
+
+function toggleLang() {
+  lang = lang === "pt" ? "en" : "pt";
+  renderText();
+}
+
+function renderText() {
+  const t = {
+    pt: {
+      title: "Calculadora de Risco Arrítmico na Doença de Chagas",
+      subtitle: "Baseada em mecânica miocárdica por Speckle Tracking",
+      h1: "O que é esta calculadora?",
+      desc: "Esta calculadora estima a probabilidade percentual de um paciente com Doença de Chagas apresentar um perfil ecocardiográfico semelhante ao de indivíduos com substrato arrítmico significativo, tomando como referência pacientes chagásicos com CDI em prevenção secundária.",
+      warn: "⚠️ Esta calculadora é aplicável exclusivamente a pacientes com Doença de Chagas. Não estabelece diagnóstico e não substitui julgamento clínico individualizado.",
+      h2: "Calculadora",
+      lbl1: "Massa do Ventrículo Esquerdo (g)",
+      lbl2: "Dispersão Mecânica do VE (ms)",
+      btn: "Calcular Risco",
+      h3: "Fundamentação Científica"
+    },
+    en: {
+      title: "Arrhythmic Risk Calculator in Chagas Disease",
+      subtitle: "Based on myocardial mechanics assessed by Speckle Tracking",
+      h1: "What is this calculator?",
+      desc: "This calculator estimates the percentage probability that a patient with Chagas disease presents an echocardiographic profile similar to individuals with a significant arrhythmogenic substrate, using patients with Chagas cardiomyopathy and ICD implanted for secondary prevention as reference.",
+      warn: "⚠️ This calculator is intended exclusively for patients with Chagas disease and does not replace individualized clinical judgment.",
+      h2: "Calculator",
+      lbl1: "Left Ventricular Mass (g)",
+      lbl2: "Left Ventricular Mechanical Dispersion (ms)",
+      btn: "Calculate Risk",
+      h3: "Scientific Background"
+    }
+  };
+
+  document.getElementById("title").innerText = t[lang].title;
+  document.getElementById("subtitle").innerText = t[lang].subtitle;
+  document.getElementById("h1").innerText = t[lang].h1;
+  document.getElementById("desc").innerText = t[lang].desc;
+  document.getElementById("warn").innerText = t[lang].warn;
+  document.getElementById("h2").innerText = t[lang].h2;
+  document.getElementById("lbl1").innerText = t[lang].lbl1;
+  document.getElementById("lbl2").innerText = t[lang].lbl2;
+  document.getElementById("h3").innerText = t[lang].h3;
+}
+
+function calc() {
+  const m = parseFloat(document.getElementById("massa").value);
+  const d = parseFloat(document.getElementById("disp").value);
+
+  if (isNaN(m) || isNaN(d)) {
+    document.getElementById("result").innerText =
+      lang === "pt" ? "Preencha todos os campos." : "Please fill in all fields.";
+    return;
+  }
+
+  const Z = -3.182 + 0.008 * m + 0.014 * d;
+  const p = 1 / (1 + Math.exp(-Z));
+  const risk = (p * 100).toFixed(1);
+
+  let classification = "";
+  if (p < 0.10) classification = lang === "pt" ? "Baixo risco" : "Low risk";
+  else if (p < 0.30) classification = lang === "pt" ? "Risco intermediário" : "Intermediate risk";
+  else classification = lang === "pt" ? "Alto risco" : "High risk";
+
+  document.getElementById("result").innerHTML =
+    (lang === "pt" ? "Risco estimado: " : "Estimated risk: ") +
+    "<strong>" + risk + "%</strong><br>" +
+    (lang === "pt" ? "Classificação: " : "Classification: ") +
+    "<strong>" + classification + "</strong>";
+}
+
+renderText();
+</script>
+
+</body>
+</html>
