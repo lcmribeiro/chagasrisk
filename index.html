@@ -49,9 +49,8 @@
       border-bottom: 2px solid #e5e7eb;
       padding-bottom: 5px;
     }
-    p {
-      line-height: 1.6;
-    }
+    p { line-height: 1.6; }
+
     .box {
       background: #f1f5f9;
       border-left: 5px solid #dc2626;
@@ -59,58 +58,78 @@
       margin: 20px 0;
       font-weight: 500;
     }
-    .interpret {
-      background: #f8fafc;
-      border-left: 5px solid #2563eb;
-      padding: 15px;
-      margin-top: 20px;
-      font-size: 15px;
-    }
-    .ack {
-      background: #f8fafc;
-      border-left: 5px solid #0f172a;
-      padding: 15px;
-      margin-top: 20px;
-      font-size: 15px;
-      font-style: italic;
-    }
-    label {
-      font-weight: 600;
-      display: block;
-      margin-top: 15px;
-    }
-    small {
-      color: #475569;
-      display: block;
-      margin-top: 4px;
-      font-size: 13px;
-    }
+
+    label { font-weight: 600; margin-top: 15px; display:block; }
+    small { color:#475569; font-size:13px; }
+
     input {
-      width: 100%;
-      padding: 10px;
-      font-size: 16px;
-      margin-top: 5px;
+      width:100%;
+      padding:10px;
+      font-size:16px;
+      margin-top:5px;
     }
+
     button.calc {
-      margin-top: 20px;
-      width: 100%;
-      padding: 14px;
-      background: #2563eb;
-      color: white;
-      font-size: 16px;
-      border: none;
-      cursor: pointer;
+      margin-top:20px;
+      width:100%;
+      padding:14px;
+      background:#2563eb;
+      color:white;
+      font-size:16px;
+      border:none;
+      cursor:pointer;
     }
-    .result {
-      margin-top: 25px;
-      font-size: 18px;
-      font-weight: 600;
+
+    .result { margin-top:25px; font-size:18px; font-weight:600; }
+
+    /* Gráfico */
+    .chart {
+      margin-top:25px;
     }
+    .bar {
+      position:relative;
+      height:18px;
+      background:linear-gradient(to right, #e5e7eb 0%, #e5e7eb 39%, #c7d2fe 39%, #c7d2fe 100%);
+      border-radius:6px;
+    }
+    .cutoff {
+      position:absolute;
+      left:39%;
+      top:-6px;
+      width:2px;
+      height:30px;
+      background:#dc2626;
+    }
+    .marker {
+      position:absolute;
+      top:-6px;
+      width:12px;
+      height:12px;
+      background:#2563eb;
+      border-radius:50%;
+      transform:translateX(-50%);
+    }
+    .chart-labels {
+      display:flex;
+      justify-content:space-between;
+      font-size:12px;
+      margin-top:5px;
+      color:#475569;
+    }
+
+    .interpret {
+      background:#f8fafc;
+      border-left:5px solid #2563eb;
+      padding:15px;
+      margin-top:20px;
+      font-size:15px;
+    }
+
     footer {
-      text-align: center;
-      padding: 20px;
-      font-size: 14px;
-      color: #475569;
+      text-align:center;
+      padding:20px;
+      font-size:14px;
+      color:#475569;
     }
   </style>
 </head>
@@ -119,47 +138,46 @@
 
 <header>
   <button class="lang-btn" onclick="toggleLang()">EN / PT</button>
-  <h1 id="title"></h1>
-  <p id="subtitle"></p>
+  <h1>Calculadora de Risco Arrítmico na Doença de Chagas</h1>
+  <p>Baseada em mecânica miocárdica por Speckle Tracking</p>
 </header>
 
 <main>
 
-  <h2 id="h1"></h2>
-  <p id="desc"></p>
+  <h2>Calculadora</h2>
 
-  <div class="box" id="warn"></div>
+  <label>Massa do Ventrículo Esquerdo (g)</label>
+  <small>Massa absoluta, sem indexação (Devereux)</small>
+  <input type="number" id="massa">
 
-  <h2 id="h2"></h2>
+  <label>Dispersão Mecânica do VE (ms)</label>
+  <small>Desvio padrão do tempo ao pico do strain longitudinal</small>
+  <input type="number" id="disp">
 
-  <label id="lbl1"></label>
-  <small id="lbl1desc"></small>
-  <input type="number" id="massa" placeholder="Ex: 220">
-
-  <label id="lbl2"></label>
-  <small id="lbl2desc"></small>
-  <input type="number" id="disp" placeholder="Ex: 65">
-
-  <button class="calc" onclick="calc()" id="btnCalc"></button>
+  <!-- BOTÃO CORRIGIDO -->
+  <button class="calc" onclick="calc()">Calcular Risco</button>
 
   <div class="result" id="result"></div>
+
+  <!-- GRÁFICO -->
+  <div class="chart" id="chart" style="display:none;">
+    <div class="bar">
+      <div class="cutoff" title="Cutoff do modelo: 39%"></div>
+      <div class="marker" id="marker"></div>
+    </div>
+    <div class="chart-labels">
+      <span>0%</span>
+      <span>39% (cutoff)</span>
+      <span>100%</span>
+    </div>
+  </div>
+
   <div class="interpret" id="interpret"></div>
-
-  <h2 id="h3"></h2>
-  <p id="ref">
-    <strong>Ribeiro, Luiz Carlos Madruga.</strong>
-    <em>Mecânica miocárdica avaliada por Speckle Tracking como marcador prognóstico na cardiomiopatia chagásica.</em>
-    Tese (Doutorado) – Programa de Cardiologia, Faculdade de Medicina da Universidade de São Paulo (FMUSP).
-    <strong>Orientadora: Profa. Dra. Ludhmila Abrahão Hajjar.</strong>
-    São Paulo, 2025.
-  </p>
-
-  <div class="ack" id="ack"></div>
 
 </main>
 
 <footer>
-  © Reprodução autorizada pelo autor – FMUSP 2025
+  © Ribeiro, L.C.M. – FMUSP 2025
 </footer>
 
 <script>
@@ -167,47 +185,6 @@ let lang = "pt";
 
 function toggleLang() {
   lang = lang === "pt" ? "en" : "pt";
-  renderText();
-}
-
-function renderText() {
-  const t = {
-    pt: {
-      title: "Calculadora de Risco Arrítmico na Doença de Chagas",
-      subtitle: "Baseada em mecânica miocárdica por Speckle Tracking",
-      h1: "O que é esta calculadora?",
-      desc: "Esta calculadora estima a probabilidade percentual de um paciente com Doença de Chagas apresentar um perfil ecocardiográfico semelhante ao de indivíduos com substrato arritmogênico significativo, tomando como referência pacientes chagásicos com CDI em prevenção secundária.",
-      warn: "⚠️ Aplicável exclusivamente a pacientes com Doença de Chagas. Não estabelece diagnóstico e não substitui julgamento clínico individualizado.",
-      h2: "Calculadora",
-      lbl1: "Massa do Ventrículo Esquerdo (g)",
-      lbl1desc: "Massa absoluta, sem indexação, calculada pelo método de Devereux.",
-      lbl2: "Dispersão Mecânica do VE (ms)",
-      lbl2desc: "Desvio padrão do tempo até o pico do strain longitudinal (ms).",
-      btn: "Calcular Risco",
-      h3: "Fundamentação Científica",
-      ack: "Agradecimentos: O autor agradece à Dra. Adenalva Lima de Souza Beck e à Profa. Dra. Ludhmila Abrahão Hajjar pelo apoio científico, orientação e contribuição intelectual ao desenvolvimento deste projeto."
-    },
-    en: {
-      title: "Arrhythmic Risk Calculator in Chagas Disease",
-      subtitle: "Based on myocardial mechanics assessed by Speckle Tracking",
-      h1: "What is this calculator?",
-      desc: "This calculator estimates the probability that a patient with Chagas disease presents an echocardiographic profile similar to individuals with an arrhythmogenic substrate, using ICD recipients for secondary prevention as reference.",
-      warn: "⚠️ Intended exclusively for patients with Chagas disease. Does not replace clinical judgment.",
-      h2: "Calculator",
-      lbl1: "Left Ventricular Mass (g)",
-      lbl1desc: "Absolute LV mass, without indexation, calculated using the Devereux method.",
-      lbl2: "Left Ventricular Mechanical Dispersion (ms)",
-      lbl2desc: "Standard deviation of time to peak longitudinal strain (ms).",
-      btn: "Calculate Risk",
-      h3: "Scientific Background",
-      ack: "Acknowledgements: The author thanks Dr. Adenalva Lima de Souza Beck and Prof. Ludhmila Abrahão Hajjar, MD, PhD, for scientific support, supervision, and intellectual contribution."
-    }
-  };
-
-  Object.keys(t[lang]).forEach(k => {
-    const el = document.getElementById(k);
-    if (el) el.innerText = t[lang][k];
-  });
 }
 
 function calc() {
@@ -215,9 +192,7 @@ function calc() {
   const d = parseFloat(document.getElementById("disp").value);
 
   if (isNaN(m) || isNaN(d)) {
-    document.getElementById("result").innerText =
-      lang === "pt" ? "Preencha todos os campos." : "Please fill in all fields.";
-    document.getElementById("interpret").innerText = "";
+    document.getElementById("result").innerText = "Preencha todos os campos.";
     return;
   }
 
@@ -226,23 +201,23 @@ function calc() {
   const risk = (p * 100).toFixed(1);
 
   document.getElementById("result").innerHTML =
-    (lang === "pt" ? "Probabilidade estimada pelo modelo: " : "Model-estimated probability: ") +
-    "<strong>" + risk + "%</strong>";
+    "Probabilidade estimada pelo modelo: <strong>" + risk + "%</strong>";
 
+  // Atualiza gráfico
+  document.getElementById("chart").style.display = "block";
+  document.getElementById("marker").style.left = risk + "%";
+
+  // Interpretação
   if (p >= 0.39) {
     document.getElementById("interpret").innerText =
-      lang === "pt"
-      ? "Classificação pelo modelo: Perfil compatível com substrato arritmogênico, conforme definido pela presença de CDI em prevenção secundária. Este ponto de corte (0,39) apresenta sensibilidade de 60,3% e especificidade de 63,3%."
-      : "Model-based classification: Profile compatible with an arrhythmogenic substrate, as defined by ICD for secondary prevention. This cutoff (0.39) is associated with 60.3% sensitivity and 63.3% specificity.";
+      "Perfil compatível com substrato arritmogênico segundo o modelo (CDI prevenção secundária). " +
+      "Cutoff 0,39 – Sensibilidade 60,3% | Especificidade 63,3%.";
   } else {
     document.getElementById("interpret").innerText =
-      lang === "pt"
-      ? "Classificação pelo modelo: Perfil menos frequentemente associado a substrato arritmogênico. Para este ponto de corte (0,39), o modelo apresenta sensibilidade de 60,3% e especificidade de 63,3%. A classificação negativa não exclui risco individual."
-      : "Model-based classification: Profile less frequently associated with an arrhythmogenic substrate. At this cutoff (0.39), model sensitivity is 60.3% and specificity is 63.3%. A negative classification does not exclude individual risk.";
+      "Perfil menos frequentemente associado a substrato arritmogênico segundo o modelo. " +
+      "Cutoff 0,39 – Sensibilidade 60,3% | Especificidade 63,3%.";
   }
 }
-
-renderText();
 </script>
 
 </body>
