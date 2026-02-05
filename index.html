@@ -83,6 +83,13 @@
       margin-top: 15px;
     }
 
+    small {
+      color: #475569;
+      display: block;
+      margin-top: 4px;
+      font-size: 13px;
+    }
+
     input {
       width: 100%;
       padding: 10px;
@@ -120,34 +127,38 @@
 
 <header>
   <button class="lang-btn" onclick="toggleLang()">EN / PT</button>
-  <h1 id="title">Calculadora de Risco Arrítmico na Doença de Chagas</h1>
-  <p id="subtitle">Baseada em mecânica miocárdica por Speckle Tracking</p>
+  <h1 id="title"></h1>
+  <p id="subtitle"></p>
 </header>
 
 <main>
 
-  <h2 id="h1">O que é esta calculadora?</h2>
+  <h2 id="h1"></h2>
   <p id="desc"></p>
 
   <div class="box" id="warn"></div>
 
-  <h2 id="h2">Calculadora</h2>
+  <h2 id="h2"></h2>
 
   <label id="lbl1"></label>
+  <small id="lbl1desc"></small>
   <input type="number" id="massa" placeholder="Ex: 220">
 
   <label id="lbl2"></label>
+  <small id="lbl2desc"></small>
   <input type="number" id="disp" placeholder="Ex: 65">
 
   <button class="calc" onclick="calc()" id="btnCalc"></button>
 
   <div class="result" id="result"></div>
 
-  <h2 id="h3">Fundamentação Científica</h2>
+  <h2 id="h3"></h2>
   <p id="ref">
-    Ribeiro, Luiz Carlos Madruga. <em>Mecânica miocárdica avaliada por Speckle Tracking como marcador
-    prognóstico na cardiomiopatia chagásica.</em> Tese (Doutorado) – Programa de Cardiologia,
-    Faculdade de Medicina da Universidade de São Paulo (FMUSP). São Paulo, 2025.
+    <strong>Ribeiro, Luiz Carlos Madruga.</strong>
+    <em>Mecânica miocárdica avaliada por Speckle Tracking como marcador prognóstico na cardiomiopatia chagásica.</em>
+    Tese (Doutorado) – Programa de Cardiologia, Faculdade de Medicina da Universidade de São Paulo (FMUSP).
+    <strong>Orientadora: Profa. Dra. Ludhmila Abrahão Hajjar.</strong>
+    São Paulo, 2025.
   </p>
 
   <div class="ack" id="ack"></div>
@@ -173,26 +184,30 @@ function renderText() {
       subtitle: "Baseada em mecânica miocárdica por Speckle Tracking",
       h1: "O que é esta calculadora?",
       desc: "Esta calculadora estima a probabilidade percentual de um paciente com Doença de Chagas apresentar um perfil ecocardiográfico semelhante ao de indivíduos com substrato arrítmico significativo, tomando como referência pacientes chagásicos com Cardiodesfibrilador Implantável (CDI) em prevenção secundária.",
-      warn: "⚠️ Esta calculadora é aplicável exclusivamente a pacientes com Doença de Chagas. Não estabelece diagnóstico e não substitui julgamento clínico individualizado.",
+      warn: "⚠️ Aplicável exclusivamente a pacientes com Doença de Chagas. Não estabelece diagnóstico e não substitui julgamento clínico individualizado.",
       h2: "Calculadora",
       lbl1: "Massa do Ventrículo Esquerdo (g)",
+      lbl1desc: "Massa absoluta do ventrículo esquerdo, sem indexação, calculada pelo método de Devereux (em gramas).",
       lbl2: "Dispersão Mecânica do VE (ms)",
+      lbl2desc: "Desvio padrão do tempo até o pico de deformação (strain longitudinal), expresso em milissegundos.",
       btn: "Calcular Risco",
       h3: "Fundamentação Científica",
-      ack: "Agradecimentos: Os autores agradecem à Dra. Adenalva Lima de Souza Beck e à Profa. Dra. Ludhmila Abrahão Hajjar pelo apoio científico, orientação e contribuição intelectual ao desenvolvimento deste projeto."
+      ack: "Agradecimentos: O autor agradece à Dra. Adenalva Lima de Souza Beck e à Profa. Dra. Ludhmila Abrahão Hajjar pelo apoio científico, orientação e contribuição intelectual ao desenvolvimento deste projeto."
     },
     en: {
       title: "Arrhythmic Risk Calculator in Chagas Disease",
       subtitle: "Based on myocardial mechanics assessed by Speckle Tracking",
       h1: "What is this calculator?",
       desc: "This calculator estimates the percentage probability that a patient with Chagas disease presents an echocardiographic profile similar to individuals with a significant arrhythmogenic substrate, using patients with Chagas cardiomyopathy and ICD implanted for secondary prevention as reference.",
-      warn: "⚠️ This calculator is intended exclusively for patients with Chagas disease and does not replace individualized clinical judgment.",
+      warn: "⚠️ Intended exclusively for patients with Chagas disease. Does not replace individualized clinical judgment.",
       h2: "Calculator",
       lbl1: "Left Ventricular Mass (g)",
+      lbl1desc: "Absolute left ventricular mass, without indexation, calculated using the Devereux method (grams).",
       lbl2: "Left Ventricular Mechanical Dispersion (ms)",
+      lbl2desc: "Standard deviation of time to peak longitudinal strain across LV segments, expressed in milliseconds.",
       btn: "Calculate Risk",
       h3: "Scientific Background",
-      ack: "Acknowledgements: The authors thank Dr. Adenalva Lima de Souza Beck and Prof. Ludhmila Abrahão Hajjar, MD, PhD, for their scientific support, guidance, and intellectual contribution to the development of this project."
+      ack: "Acknowledgements: The author thanks Dr. Adenalva Lima de Souza Beck and Prof. Ludhmila Abrahão Hajjar, MD, PhD, for their scientific support, supervision, and intellectual contribution to this project."
     }
   };
 
@@ -203,7 +218,9 @@ function renderText() {
   document.getElementById("warn").innerText = t[lang].warn;
   document.getElementById("h2").innerText = t[lang].h2;
   document.getElementById("lbl1").innerText = t[lang].lbl1;
+  document.getElementById("lbl1desc").innerText = t[lang].lbl1desc;
   document.getElementById("lbl2").innerText = t[lang].lbl2;
+  document.getElementById("lbl2desc").innerText = t[lang].lbl2desc;
   document.getElementById("btnCalc").innerText = t[lang].btn;
   document.getElementById("h3").innerText = t[lang].h3;
   document.getElementById("ack").innerText = t[lang].ack;
