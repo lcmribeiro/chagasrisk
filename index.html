@@ -68,6 +68,15 @@
       font-weight: 500;
     }
 
+    .ack {
+      background: #f8fafc;
+      border-left: 5px solid #0f172a;
+      padding: 15px;
+      margin-top: 20px;
+      font-size: 15px;
+      font-style: italic;
+    }
+
     label {
       font-weight: 600;
       display: block;
@@ -118,27 +127,19 @@
 <main>
 
   <h2 id="h1">O que é esta calculadora?</h2>
-  <p id="desc">
-    Esta calculadora estima a <strong>probabilidade percentual</strong> de um paciente com
-    <strong>Doença de Chagas</strong> apresentar um perfil ecocardiográfico semelhante ao de indivíduos
-    com <strong>substrato arrítmico significativo</strong>, tomando como referência pacientes
-    chagásicos com <strong>Cardiodesfibrilador Implantável (CDI) em prevenção secundária</strong>.
-  </p>
+  <p id="desc"></p>
 
-  <div class="box" id="warn">
-    ⚠️ Esta calculadora é aplicável exclusivamente a pacientes com Doença de Chagas.
-    Não estabelece diagnóstico e não substitui julgamento clínico individualizado.
-  </div>
+  <div class="box" id="warn"></div>
 
   <h2 id="h2">Calculadora</h2>
 
-  <label id="lbl1">Massa do Ventrículo Esquerdo (g)</label>
+  <label id="lbl1"></label>
   <input type="number" id="massa" placeholder="Ex: 220">
 
-  <label id="lbl2">Dispersão Mecânica do VE (ms)</label>
+  <label id="lbl2"></label>
   <input type="number" id="disp" placeholder="Ex: 65">
 
-  <button class="calc" onclick="calc()">Calcular Risco</button>
+  <button class="calc" onclick="calc()" id="btnCalc"></button>
 
   <div class="result" id="result"></div>
 
@@ -146,9 +147,10 @@
   <p id="ref">
     Ribeiro, Luiz Carlos Madruga. <em>Mecânica miocárdica avaliada por Speckle Tracking como marcador
     prognóstico na cardiomiopatia chagásica.</em> Tese (Doutorado) – Programa de Cardiologia,
-    Faculdade de Medicina da Universidade de São Paulo (FMUSP). Orientadora: Profa. Dra. Ludhmila
-    Abrahão Hajjar. São Paulo, 2025.
+    Faculdade de Medicina da Universidade de São Paulo (FMUSP). São Paulo, 2025.
   </p>
+
+  <div class="ack" id="ack"></div>
 
 </main>
 
@@ -170,13 +172,14 @@ function renderText() {
       title: "Calculadora de Risco Arrítmico na Doença de Chagas",
       subtitle: "Baseada em mecânica miocárdica por Speckle Tracking",
       h1: "O que é esta calculadora?",
-      desc: "Esta calculadora estima a probabilidade percentual de um paciente com Doença de Chagas apresentar um perfil ecocardiográfico semelhante ao de indivíduos com substrato arrítmico significativo, tomando como referência pacientes chagásicos com CDI em prevenção secundária.",
+      desc: "Esta calculadora estima a probabilidade percentual de um paciente com Doença de Chagas apresentar um perfil ecocardiográfico semelhante ao de indivíduos com substrato arrítmico significativo, tomando como referência pacientes chagásicos com Cardiodesfibrilador Implantável (CDI) em prevenção secundária.",
       warn: "⚠️ Esta calculadora é aplicável exclusivamente a pacientes com Doença de Chagas. Não estabelece diagnóstico e não substitui julgamento clínico individualizado.",
       h2: "Calculadora",
       lbl1: "Massa do Ventrículo Esquerdo (g)",
       lbl2: "Dispersão Mecânica do VE (ms)",
       btn: "Calcular Risco",
-      h3: "Fundamentação Científica"
+      h3: "Fundamentação Científica",
+      ack: "Agradecimentos: Os autores agradecem à Dra. Adenalva Lima de Souza Beck e à Profa. Dra. Ludhmila Abrahão Hajjar pelo apoio científico, orientação e contribuição intelectual ao desenvolvimento deste projeto."
     },
     en: {
       title: "Arrhythmic Risk Calculator in Chagas Disease",
@@ -188,7 +191,8 @@ function renderText() {
       lbl1: "Left Ventricular Mass (g)",
       lbl2: "Left Ventricular Mechanical Dispersion (ms)",
       btn: "Calculate Risk",
-      h3: "Scientific Background"
+      h3: "Scientific Background",
+      ack: "Acknowledgements: The authors thank Dr. Adenalva Lima de Souza Beck and Prof. Ludhmila Abrahão Hajjar, MD, PhD, for their scientific support, guidance, and intellectual contribution to the development of this project."
     }
   };
 
@@ -200,7 +204,9 @@ function renderText() {
   document.getElementById("h2").innerText = t[lang].h2;
   document.getElementById("lbl1").innerText = t[lang].lbl1;
   document.getElementById("lbl2").innerText = t[lang].lbl2;
+  document.getElementById("btnCalc").innerText = t[lang].btn;
   document.getElementById("h3").innerText = t[lang].h3;
+  document.getElementById("ack").innerText = t[lang].ack;
 }
 
 function calc() {
