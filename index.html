@@ -1,259 +1,245 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Calculadora de Risco Arrítmico na Doença de Chagas</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Calculadora de Risco Arrítmico – Doença de Chagas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
 
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #f5f7fa;
-      margin: 0;
-      color: #1f2933;
-    }
+<style>
+body{
+  font-family:'Inter',sans-serif;
+  background:#f5f7fa;
+  margin:0;
+  color:#1f2933;
+}
+header{
+  background:#0f172a;
+  color:#fff;
+  padding:30px;
+  text-align:center;
+}
+header h1{
+  font-family:'Playfair Display',serif;
+  margin-bottom:6px;
+}
+main{
+  max-width:900px;
+  margin:auto;
+  background:#fff;
+  padding:40px 20px;
+}
+h2{
+  margin-top:40px;
+  border-bottom:2px solid #e5e7eb;
+}
+.box{
+  background:#f1f5f9;
+  border-left:5px solid #dc2626;
+  padding:15px;
+  margin:20px 0;
+}
+label{font-weight:600;display:block;margin-top:15px;}
+small{color:#475569;font-size:13px;}
+input{
+  width:100%;
+  padding:10px;
+  font-size:16px;
+}
+button.calc{
+  margin-top:20px;
+  width:100%;
+  padding:14px;
+  background:#2563eb;
+  color:#fff;
+  border:none;
+  font-size:16px;
+  cursor:pointer;
+}
+.result{
+  margin-top:25px;
+  font-size:26px;
+  font-weight:700;
+}
+.green{color:#15803d;}
+.red{color:#b91c1c;}
 
-    header {
-      background: #0f172a;
-      color: white;
-      padding: 30px;
-      text-align: center;
-      position: relative;
-    }
+.chart{margin-top:25px;display:none;}
+.bar{
+  position:relative;
+  height:18px;
+  background:linear-gradient(to right,#e5e7eb 0%,#e5e7eb 39%,#bbf7d0 39%,#bbf7d0 100%);
+  border-radius:6px;
+}
+.cutoff{
+  position:absolute;
+  left:39%;
+  top:-6px;
+  width:2px;
+  height:30px;
+  background:#dc2626;
+}
+.marker{
+  position:absolute;
+  top:-6px;
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  transform:translateX(-50%);
+}
 
-    header h1 {
-      font-family: 'Playfair Display', serif;
-      margin-bottom: 8px;
-    }
+.interpret{
+  margin-top:20px;
+  padding:15px;
+  border-left:5px solid #2563eb;
+  background:#f8fafc;
+}
 
-    .lang-btn {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: #2563eb;
-      border: none;
-      color: white;
-      padding: 8px 12px;
-      cursor: pointer;
-      font-size: 14px;
-    }
+.report{
+  margin-top:20px;
+  padding:15px;
+  border-left:5px solid #0f172a;
+  background:#f8fafc;
+}
 
-    main {
-      max-width: 900px;
-      margin: auto;
-      background: white;
-      padding: 40px 20px;
-    }
+.report p{
+  font-size:14px;
+  line-height:1.5;
+  margin-top:10px;
+}
 
-    h2 {
-      margin-top: 40px;
-      border-bottom: 2px solid #e5e7eb;
-      padding-bottom: 5px;
-    }
+.ack{
+  margin-top:20px;
+  padding:15px;
+  border-left:5px solid #0f172a;
+  background:#f8fafc;
+  font-style:italic;
+}
 
-    p { line-height: 1.6; }
-
-    .box {
-      background: #f1f5f9;
-      border-left: 5px solid #dc2626;
-      padding: 15px;
-      margin: 20px 0;
-      font-weight: 500;
-    }
-
-    label { font-weight: 600; display:block; margin-top:15px; }
-    small { color:#475569; font-size:13px; }
-
-    input {
-      width:100%;
-      padding:10px;
-      font-size:16px;
-      margin-top:5px;
-    }
-
-    button.calc {
-      margin-top:20px;
-      width:100%;
-      padding:14px;
-      background:#2563eb;
-      color:white;
-      font-size:16px;
-      border:none;
-      cursor:pointer;
-    }
-
-    .result {
-      margin-top:25px;
-      font-size:18px;
-      font-weight:600;
-    }
-
-    .interpret {
-      background:#f8fafc;
-      border-left:5px solid #2563eb;
-      padding:15px;
-      margin-top:20px;
-      font-size:15px;
-    }
-
-    /* Gráfico */
-    .chart { margin-top:25px; display:none; }
-    .bar {
-      position:relative;
-      height:18px;
-      background:linear-gradient(to right,#e5e7eb 0%,#e5e7eb 39%,#c7d2fe 39%,#c7d2fe 100%);
-      border-radius:6px;
-    }
-    .cutoff {
-      position:absolute;
-      left:39%;
-      top:-6px;
-      width:2px;
-      height:30px;
-      background:#dc2626;
-    }
-    .marker {
-      position:absolute;
-      top:-6px;
-      width:12px;
-      height:12px;
-      background:#2563eb;
-      border-radius:50%;
-      transform:translateX(-50%);
-    }
-    .chart-labels {
-      display:flex;
-      justify-content:space-between;
-      font-size:12px;
-      margin-top:5px;
-      color:#475569;
-    }
-
-    .ack {
-      background:#f8fafc;
-      border-left:5px solid #0f172a;
-      padding:15px;
-      margin-top:20px;
-      font-size:15px;
-      font-style:italic;
-    }
-
-    footer {
-      text-align:center;
-      padding:20px;
-      font-size:14px;
-      color:#475569;
-    }
-  </style>
+footer{
+  text-align:center;
+  padding:20px;
+  font-size:14px;
+  color:#475569;
+}
+</style>
 </head>
 
 <body>
 
 <header>
-  <button class="lang-btn">EN / PT</button>
   <h1>Calculadora de Risco Arrítmico na Doença de Chagas</h1>
   <p>Baseada em mecânica miocárdica por Speckle Tracking</p>
 </header>
 
 <main>
 
-  <!-- TEXTO RESTAURADO -->
-  <h2>O que é esta calculadora?</h2>
-  <p>
-    Esta calculadora estima a <strong>probabilidade percentual</strong> de um paciente com
-    <strong>Doença de Chagas</strong> apresentar um perfil ecocardiográfico semelhante ao de indivíduos
-    com <strong>substrato arritmogênico significativo</strong>, tomando como referência pacientes
-    chagásicos com <strong>Cardiodesfibrilador Implantável (CDI) em prevenção secundária</strong>.
-  </p>
+<h2>O que é esta calculadora?</h2>
+<p>
+Esta ferramenta estima a probabilidade, pelo modelo de regressão logística, de um paciente com
+<strong>Doença de Chagas</strong> apresentar perfil semelhante ao de indivíduos com
+<strong>substrato arritmogênico</strong>, tomando como referência pacientes com
+<strong>CDI em prevenção secundária</strong>.
+</p>
 
-  <div class="box">
-    ⚠️ Aplicável exclusivamente a pacientes com Doença de Chagas.
-    Não estabelece diagnóstico e não substitui julgamento clínico individualizado.
+<div class="box">
+⚠️ Aplicável exclusivamente a pacientes com Doença de Chagas.  
+Não substitui julgamento clínico individualizado.
+</div>
+
+<h2>Calculadora</h2>
+
+<label>Massa do Ventrículo Esquerdo (g)</label>
+<small>Massa absoluta, sem indexação, calculada pelo método de Devereux.</small>
+<input type="number" id="massa">
+
+<label>Dispersão Mecânica do VE (ms)</label>
+<small>Desvio padrão do tempo até o pico do strain longitudinal.</small>
+<input type="number" id="disp">
+
+<button class="calc" onclick="calc()">Calcular Risco</button>
+
+<div class="result" id="result"></div>
+
+<div class="chart" id="chart">
+  <div class="bar">
+    <div class="cutoff" title="Cutoff 0,39"></div>
+    <div class="marker" id="marker"></div>
   </div>
+</div>
 
-  <!-- CALCULADORA -->
-  <h2>Calculadora</h2>
+<div class="interpret" id="interpret"></div>
 
-  <label>Massa do Ventrículo Esquerdo (g)</label>
-  <small>Massa absoluta, sem indexação, calculada pelo método de Devereux.</small>
-  <input type="number" id="massa">
+<div class="report" id="reportBox" style="display:none;">
+  <strong>Texto sugerido para laudo:</strong>
+  <p id="reportText"></p>
+  <button class="calc" onclick="copyReport()">Copiar texto para laudo</button>
+</div>
 
-  <label>Dispersão Mecânica do VE (ms)</label>
-  <small>Desvio padrão do tempo até o pico do strain longitudinal.</small>
-  <input type="number" id="disp">
+<h2>Fundamentação Científica</h2>
+<p>
+<strong>Ribeiro, Luiz Carlos Madruga.</strong>
+<em>Mecânica miocárdica avaliada por Speckle Tracking como marcador prognóstico na cardiomiopatia chagásica.</em>
+Tese (Doutorado) – Programa de Cardiologia, Faculdade de Medicina da Universidade de São Paulo (FMUSP).
+<strong>Orientadora: Profa. Dra. Ludhmila Abrahão Hajjar.</strong> São Paulo, 2025.
+</p>
 
-  <button class="calc" onclick="calc()">Calcular Risco</button>
-
-  <div class="result" id="result"></div>
-
-  <!-- GRÁFICO -->
-  <div class="chart" id="chart">
-    <div class="bar">
-      <div class="cutoff" title="Cutoff do modelo: 39%"></div>
-      <div class="marker" id="marker"></div>
-    </div>
-    <div class="chart-labels">
-      <span>0%</span>
-      <span>39% (cutoff)</span>
-      <span>100%</span>
-    </div>
-  </div>
-
-  <div class="interpret" id="interpret"></div>
-
-  <!-- REFERÊNCIA -->
-  <h2>Fundamentação Científica</h2>
-  <p>
-    <strong>Ribeiro, Luiz Carlos Madruga.</strong>
-    <em>Mecânica miocárdica avaliada por Speckle Tracking como marcador prognóstico na cardiomiopatia chagásica.</em>
-    Tese (Doutorado) – Programa de Cardiologia, Faculdade de Medicina da Universidade de São Paulo (FMUSP).
-    <strong>Orientadora: Profa. Dra. Ludhmila Abrahão Hajjar.</strong>
-    São Paulo, 2025.
-  </p>
-
-  <!-- AGRADECIMENTOS RESTAURADOS -->
-  <div class="ack">
-    Agradecimentos: O autor agradece à Dra. Adenalva Lima de Souza Beck e à Profa. Dra. Ludhmila Abrahão Hajjar
-    pelo apoio científico, orientação e contribuição intelectual ao desenvolvimento deste projeto.
-  </div>
+<div class="ack">
+Agradecimentos: O autor agradece à Dra. Adenalva Lima de Souza Beck e à Profa. Dra. Ludhmila Abrahão Hajjar
+pelo apoio científico e contribuição intelectual neste projeto.
+</div>
 
 </main>
 
 <footer>
-  © Ribeiro, L.C.M. – FMUSP 2025
+© Ribeiro, L.C.M. – FMUSP 2025
 </footer>
 
 <script>
-function calc() {
-  const m = parseFloat(document.getElementById("massa").value);
-  const d = parseFloat(document.getElementById("disp").value);
+function calc(){
+  const m=parseFloat(massa.value);
+  const d=parseFloat(disp.value);
+  if(isNaN(m)||isNaN(d)) return;
 
-  if (isNaN(m) || isNaN(d)) {
-    document.getElementById("result").innerText = "Preencha todos os campos.";
-    return;
-  }
+  const Z=-3.182+0.008*m+0.014*d;
+  const p=1/(1+Math.exp(-Z));
+  const val=p.toFixed(2);
 
-  const Z = -3.182 + 0.008 * m + 0.014 * d;
-  const p = 1 / (1 + Math.exp(-Z));
-  const risk = (p * 100).toFixed(1);
+  result.innerHTML=
+    `Probabilidade estimada pelo modelo: 
+     <span class="${p>=0.39?'green':'red'}">${val}</span>`;
 
-  document.getElementById("result").innerHTML =
-    "Probabilidade estimada pelo modelo: <strong>" + risk + "%</strong>";
+  chart.style.display="block";
+  marker.style.left=(p*100)+"%";
+  marker.style.background=p>=0.39?"#15803d":"#b91c1c";
 
-  document.getElementById("chart").style.display = "block";
-  document.getElementById("marker").style.left = risk + "%";
+  interpret.innerText=
+    p>=0.39
+    ?"Perfil compatível com substrato arritmogênico (cutoff 0,39 – sensibilidade 60,3%, especificidade 63,3%)."
+    :"Perfil menos frequentemente associado a substrato arritmogênico (cutoff 0,39).";
 
-  if (p >= 0.39) {
-    document.getElementById("interpret").innerText =
-      "Classificação pelo modelo: Perfil compatível com substrato arritmogênico, conforme definido pela presença de CDI em prevenção secundária. Cutoff 0,39 – Sensibilidade 60,3% e especificidade 63,3%.";
-  } else {
-    document.getElementById("interpret").innerText =
-      "Classificação pelo modelo: Perfil menos frequentemente associado a substrato arritmogênico. Para este ponto de corte (0,39), sensibilidade de 60,3% e especificidade de 63,3%. A classificação negativa não exclui risco individual.";
-  }
+  updateReportText(p);
+}
+
+function updateReportText(p){
+  const value=p.toFixed(2);
+  const above=p>=0.39;
+
+  reportText.innerText=
+`Realizado cálculo de risco arrítmico por regressão logística com probabilidade estimada de ${value}.
+Valor ${above?"acima":"abaixo"} do ponto de corte (0,39), ${above?"associado":"não associado"} a substrato arritmogênico.
+Modelo com sensibilidade de 60,3% e especificidade de 63,3%.
+Conforme Ribeiro LCM, tese de doutorado, FMUSP 2025.`;
+
+  reportBox.style.display="block";
+}
+
+function copyReport(){
+  navigator.clipboard.writeText(reportText.innerText)
+    .then(()=>alert("Texto copiado para a área de transferência."));
 }
 </script>
 
