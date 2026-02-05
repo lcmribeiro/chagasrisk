@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Arrhythmic Risk Calculator in Chagas Disease</title>
+  <title>Calculadora de Risco Arrítmico na Doença de Chagas</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,6 +16,7 @@
       margin: 0;
       color: #1f2933;
     }
+
     header {
       background: #0f172a;
       color: white;
@@ -23,10 +24,12 @@
       text-align: center;
       position: relative;
     }
+
     header h1 {
       font-family: 'Playfair Display', serif;
       margin-bottom: 8px;
     }
+
     .lang-btn {
       position: absolute;
       top: 20px;
@@ -38,17 +41,20 @@
       cursor: pointer;
       font-size: 14px;
     }
+
     main {
       max-width: 900px;
       margin: auto;
       background: white;
       padding: 40px 20px;
     }
+
     h2 {
       margin-top: 40px;
       border-bottom: 2px solid #e5e7eb;
       padding-bottom: 5px;
     }
+
     p { line-height: 1.6; }
 
     .box {
@@ -59,7 +65,7 @@
       font-weight: 500;
     }
 
-    label { font-weight: 600; margin-top: 15px; display:block; }
+    label { font-weight: 600; display:block; margin-top:15px; }
     small { color:#475569; font-size:13px; }
 
     input {
@@ -80,16 +86,26 @@
       cursor:pointer;
     }
 
-    .result { margin-top:25px; font-size:18px; font-weight:600; }
+    .result {
+      margin-top:25px;
+      font-size:18px;
+      font-weight:600;
+    }
+
+    .interpret {
+      background:#f8fafc;
+      border-left:5px solid #2563eb;
+      padding:15px;
+      margin-top:20px;
+      font-size:15px;
+    }
 
     /* Gráfico */
-    .chart {
-      margin-top:25px;
-    }
+    .chart { margin-top:25px; display:none; }
     .bar {
       position:relative;
       height:18px;
-      background:linear-gradient(to right, #e5e7eb 0%, #e5e7eb 39%, #c7d2fe 39%, #c7d2fe 100%);
+      background:linear-gradient(to right,#e5e7eb 0%,#e5e7eb 39%,#c7d2fe 39%,#c7d2fe 100%);
       border-radius:6px;
     }
     .cutoff {
@@ -117,12 +133,13 @@
       color:#475569;
     }
 
-    .interpret {
+    .ack {
       background:#f8fafc;
-      border-left:5px solid #2563eb;
+      border-left:5px solid #0f172a;
       padding:15px;
       margin-top:20px;
       font-size:15px;
+      font-style:italic;
     }
 
     footer {
@@ -137,30 +154,44 @@
 <body>
 
 <header>
-  <button class="lang-btn" onclick="toggleLang()">EN / PT</button>
+  <button class="lang-btn">EN / PT</button>
   <h1>Calculadora de Risco Arrítmico na Doença de Chagas</h1>
   <p>Baseada em mecânica miocárdica por Speckle Tracking</p>
 </header>
 
 <main>
 
+  <!-- TEXTO RESTAURADO -->
+  <h2>O que é esta calculadora?</h2>
+  <p>
+    Esta calculadora estima a <strong>probabilidade percentual</strong> de um paciente com
+    <strong>Doença de Chagas</strong> apresentar um perfil ecocardiográfico semelhante ao de indivíduos
+    com <strong>substrato arritmogênico significativo</strong>, tomando como referência pacientes
+    chagásicos com <strong>Cardiodesfibrilador Implantável (CDI) em prevenção secundária</strong>.
+  </p>
+
+  <div class="box">
+    ⚠️ Aplicável exclusivamente a pacientes com Doença de Chagas.
+    Não estabelece diagnóstico e não substitui julgamento clínico individualizado.
+  </div>
+
+  <!-- CALCULADORA -->
   <h2>Calculadora</h2>
 
   <label>Massa do Ventrículo Esquerdo (g)</label>
-  <small>Massa absoluta, sem indexação (Devereux)</small>
+  <small>Massa absoluta, sem indexação, calculada pelo método de Devereux.</small>
   <input type="number" id="massa">
 
   <label>Dispersão Mecânica do VE (ms)</label>
-  <small>Desvio padrão do tempo ao pico do strain longitudinal</small>
+  <small>Desvio padrão do tempo até o pico do strain longitudinal.</small>
   <input type="number" id="disp">
 
-  <!-- BOTÃO CORRIGIDO -->
   <button class="calc" onclick="calc()">Calcular Risco</button>
 
   <div class="result" id="result"></div>
 
   <!-- GRÁFICO -->
-  <div class="chart" id="chart" style="display:none;">
+  <div class="chart" id="chart">
     <div class="bar">
       <div class="cutoff" title="Cutoff do modelo: 39%"></div>
       <div class="marker" id="marker"></div>
@@ -174,6 +205,22 @@
 
   <div class="interpret" id="interpret"></div>
 
+  <!-- REFERÊNCIA -->
+  <h2>Fundamentação Científica</h2>
+  <p>
+    <strong>Ribeiro, Luiz Carlos Madruga.</strong>
+    <em>Mecânica miocárdica avaliada por Speckle Tracking como marcador prognóstico na cardiomiopatia chagásica.</em>
+    Tese (Doutorado) – Programa de Cardiologia, Faculdade de Medicina da Universidade de São Paulo (FMUSP).
+    <strong>Orientadora: Profa. Dra. Ludhmila Abrahão Hajjar.</strong>
+    São Paulo, 2025.
+  </p>
+
+  <!-- AGRADECIMENTOS RESTAURADOS -->
+  <div class="ack">
+    Agradecimentos: O autor agradece à Dra. Adenalva Lima de Souza Beck e à Profa. Dra. Ludhmila Abrahão Hajjar
+    pelo apoio científico, orientação e contribuição intelectual ao desenvolvimento deste projeto.
+  </div>
+
 </main>
 
 <footer>
@@ -181,12 +228,6 @@
 </footer>
 
 <script>
-let lang = "pt";
-
-function toggleLang() {
-  lang = lang === "pt" ? "en" : "pt";
-}
-
 function calc() {
   const m = parseFloat(document.getElementById("massa").value);
   const d = parseFloat(document.getElementById("disp").value);
@@ -203,19 +244,15 @@ function calc() {
   document.getElementById("result").innerHTML =
     "Probabilidade estimada pelo modelo: <strong>" + risk + "%</strong>";
 
-  // Atualiza gráfico
   document.getElementById("chart").style.display = "block";
   document.getElementById("marker").style.left = risk + "%";
 
-  // Interpretação
   if (p >= 0.39) {
     document.getElementById("interpret").innerText =
-      "Perfil compatível com substrato arritmogênico segundo o modelo (CDI prevenção secundária). " +
-      "Cutoff 0,39 – Sensibilidade 60,3% | Especificidade 63,3%.";
+      "Classificação pelo modelo: Perfil compatível com substrato arritmogênico, conforme definido pela presença de CDI em prevenção secundária. Cutoff 0,39 – Sensibilidade 60,3% e especificidade 63,3%.";
   } else {
     document.getElementById("interpret").innerText =
-      "Perfil menos frequentemente associado a substrato arritmogênico segundo o modelo. " +
-      "Cutoff 0,39 – Sensibilidade 60,3% | Especificidade 63,3%.";
+      "Classificação pelo modelo: Perfil menos frequentemente associado a substrato arritmogênico. Para este ponto de corte (0,39), sensibilidade de 60,3% e especificidade de 63,3%. A classificação negativa não exclui risco individual.";
   }
 }
 </script>
