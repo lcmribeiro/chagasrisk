@@ -64,14 +64,20 @@ button.calc{
   font-size:26px;
   font-weight:700;
 }
-.green{color:#15803d;}
-.red{color:#b91c1c;}
+.green{color:#15803d;}   /* menor risco */
+.red{color:#b91c1c;}     /* maior risco */
 
 .chart{margin-top:25px;display:none;}
 .bar{
   position:relative;
   height:18px;
-  background:linear-gradient(to right,#e5e7eb 0%,#e5e7eb 39%,#bbf7d0 39%,#bbf7d0 100%);
+  background:linear-gradient(
+    to right,
+    #bbf7d0 0%,        /* verde até o cutoff */
+    #bbf7d0 39%,
+    #fecaca 39%,      /* vermelho após cutoff */
+    #fecaca 100%
+  );
   border-radius:6px;
 }
 .cutoff{
@@ -104,7 +110,6 @@ button.calc{
   border-left:5px solid #0f172a;
   background:#f8fafc;
 }
-
 .report p{
   font-size:14px;
   line-height:1.5;
@@ -200,46 +205,47 @@ pelo apoio científico e contribuição intelectual neste projeto.
 
 <script>
 function calc(){
-  const m=parseFloat(massa.value);
-  const d=parseFloat(disp.value);
-  if(isNaN(m)||isNaN(d)) return;
+  const m = parseFloat(massa.value);
+  const d = parseFloat(disp.value);
+  if (isNaN(m) || isNaN(d)) return;
 
-  const Z=-3.182+0.008*m+0.014*d;
-  const p=1/(1+Math.exp(-Z));
-  const val=p.toFixed(2);
+  const Z = -3.182 + 0.008 * m + 0.014 * d;
+  const p = 1 / (1 + Math.exp(-Z));
+  const val = p.toFixed(2);
 
-  result.innerHTML=
+  result.innerHTML =
     `Probabilidade estimada pelo modelo: 
-     <span class="${p>=0.39?'green':'red'}">${val}</span>`;
+     <span class="${p >= 0.39 ? 'red' : 'green'}">${val}</span>`;
 
-  chart.style.display="block";
-  marker.style.left=(p*100)+"%";
-  marker.style.background=p>=0.39?"#15803d":"#b91c1c";
+  chart.style.display = "block";
+  marker.style.left = (p * 100) + "%";
+  marker.style.background = p >= 0.39 ? "#b91c1c" : "#15803d";
 
-  interpret.innerText=
-    p>=0.39
-    ?"Perfil compatível com substrato arritmogênico (cutoff 0,39 – sensibilidade 60,3%, especificidade 63,3%)."
-    :"Perfil menos frequentemente associado a substrato arritmogênico (cutoff 0,39).";
+  interpret.innerText =
+    p >= 0.39
+    ? "Perfil compatível com substrato arritmogênico (cutoff 0,39 – sensibilidade 60,3%, especificidade 63,3%)."
+    : "Perfil menos frequentemente associado a substrato arritmogênico (cutoff 0,39).";
 
   updateReportText(p);
 }
 
 function updateReportText(p){
-  const value=p.toFixed(2);
-  const above=p>=0.39;
+  const value = p.toFixed(2);
 
-  reportText.innerText=
+  reportText.innerText =
 `Realizado cálculo de risco arrítmico por regressão logística com probabilidade estimada de ${value}.
-Valor ${above?"acima":"abaixo"} do ponto de corte (0,39), ${above?"associado":"não associado"} a substrato arritmogênico.
+${p >= 0.39
+  ? "Perfil compatível com substrato arritmogênico."
+  : "Perfil menos frequentemente associado a substrato arritmogênico (cutoff 0,39)."}
 Modelo com sensibilidade de 60,3% e especificidade de 63,3%.
-Conforme Ribeiro LCM, tese de doutorado, FMUSP 2025.`;
+Conforme Ribeiro, Luiz Carlos Madruga. Mecânica miocárdica avaliada por Speckle Tracking como marcador prognóstico na cardiomiopatia chagásica. Tese de Doutorado – FMUSP, 2025.`;
 
-  reportBox.style.display="block";
+  reportBox.style.display = "block";
 }
 
 function copyReport(){
   navigator.clipboard.writeText(reportText.innerText)
-    .then(()=>alert("Texto copiado para a área de transferência."));
+    .then(() => alert("Texto copiado para a área de transferência."));
 }
 </script>
 
