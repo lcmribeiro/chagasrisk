@@ -21,10 +21,21 @@ header{
   color:#fff;
   padding:30px;
   text-align:center;
+  position:relative;
 }
 header h1{
   font-family:'Playfair Display',serif;
   margin-bottom:6px;
+}
+.lang-btn{
+  position:absolute;
+  top:20px;
+  right:20px;
+  background:#2563eb;
+  border:none;
+  color:#fff;
+  padding:8px 12px;
+  cursor:pointer;
 }
 main{
   max-width:900px;
@@ -64,8 +75,8 @@ button.calc{
   font-size:26px;
   font-weight:700;
 }
-.green{color:#15803d;}   /* menor risco */
-.red{color:#b91c1c;}     /* maior risco */
+.green{color:#15803d;} /* menor risco */
+.red{color:#b91c1c;}   /* maior risco */
 
 .chart{margin-top:25px;display:none;}
 .bar{
@@ -73,9 +84,9 @@ button.calc{
   height:18px;
   background:linear-gradient(
     to right,
-    #bbf7d0 0%,        /* verde até o cutoff */
+    #bbf7d0 0%,
     #bbf7d0 39%,
-    #fecaca 39%,      /* vermelho após cutoff */
+    #fecaca 39%,
     #fecaca 100%
   );
   border-radius:6px;
@@ -114,6 +125,7 @@ button.calc{
   font-size:14px;
   line-height:1.5;
   margin-top:10px;
+  white-space:pre-line;
 }
 
 .ack{
@@ -136,36 +148,29 @@ footer{
 <body>
 
 <header>
-  <h1>Calculadora de Risco Arrítmico na Doença de Chagas</h1>
-  <p>Baseada em mecânica miocárdica por Speckle Tracking</p>
+  <button class="lang-btn" onclick="toggleLang()">EN / PT</button>
+  <h1 id="title"></h1>
+  <p id="subtitle"></p>
 </header>
 
 <main>
 
-<h2>O que é esta calculadora?</h2>
-<p>
-Esta ferramenta estima a probabilidade, pelo modelo de regressão logística, de um paciente com
-<strong>Doença de Chagas</strong> apresentar perfil semelhante ao de indivíduos com
-<strong>substrato arritmogênico</strong>, tomando como referência pacientes com
-<strong>CDI em prevenção secundária</strong>.
-</p>
+<h2 id="h1"></h2>
+<p id="desc"></p>
 
-<div class="box">
-⚠️ Aplicável exclusivamente a pacientes com Doença de Chagas.  
-Não substitui julgamento clínico individualizado.
-</div>
+<div class="box" id="warn"></div>
 
-<h2>Calculadora</h2>
+<h2 id="h2"></h2>
 
-<label>Massa do Ventrículo Esquerdo (g)</label>
-<small>Massa absoluta, sem indexação, calculada pelo método de Devereux.</small>
+<label id="lbl1"></label>
+<small id="lbl1d"></small>
 <input type="number" id="massa">
 
-<label>Dispersão Mecânica do VE (ms)</label>
-<small>Desvio padrão do tempo até o pico do strain longitudinal.</small>
+<label id="lbl2"></label>
+<small id="lbl2d"></small>
 <input type="number" id="disp">
 
-<button class="calc" onclick="calc()">Calcular Risco</button>
+<button class="calc" onclick="calc()" id="btn"></button>
 
 <div class="result" id="result"></div>
 
@@ -179,74 +184,146 @@ Não substitui julgamento clínico individualizado.
 <div class="interpret" id="interpret"></div>
 
 <div class="report" id="reportBox" style="display:none;">
-  <strong>Texto sugerido para laudo:</strong>
+  <strong id="reportTitle"></strong>
   <p id="reportText"></p>
-  <button class="calc" onclick="copyReport()">Copiar texto para laudo</button>
+  <button class="calc" onclick="copyReport()" id="copyBtn"></button>
 </div>
 
-<h2>Fundamentação Científica</h2>
-<p>
-<strong>Ribeiro, Luiz Carlos Madruga.</strong>
-<em>Mecânica miocárdica avaliada por Speckle Tracking como marcador prognóstico na cardiomiopatia chagásica.</em>
-Tese (Doutorado) – Programa de Cardiologia, Faculdade de Medicina da Universidade de São Paulo (FMUSP).
-<strong>Orientadora: Profa. Dra. Ludhmila Abrahão Hajjar.</strong> São Paulo, 2025.
-</p>
+<h2 id="h3"></h2>
+<p id="ref"></p>
 
-<div class="ack">
-Agradecimentos: O autor agradece à Dra. Adenalva Lima de Souza Beck e à Profa. Dra. Ludhmila Abrahão Hajjar
-pelo apoio científico e contribuição intelectual neste projeto.
-</div>
+<div class="ack" id="ack"></div>
 
 </main>
 
-<footer>
-© Ribeiro, L.C.M. – FMUSP 2025
-</footer>
+<footer>© Ribeiro, L.C.M. – FMUSP 2025</footer>
 
 <script>
+let lang="pt";
+
+const T = {
+  pt: {
+    title: "Calculadora de Risco Arrítmico na Doença de Chagas",
+    subtitle: "Baseada em mecânica miocárdica por Speckle Tracking",
+    h1: "O que é esta calculadora?",
+    desc:
+      "Esta calculadora estima a probabilidade, pelo modelo de regressão logística, de um paciente com Doença de Chagas apresentar perfil semelhante ao de pacientes com CDI em prevenção secundária (substrato arritmogênico).",
+    warn:
+      "⚠️ Aplicável exclusivamente a pacientes com Doença de Chagas. Não substitui julgamento clínico.",
+    h2: "Calculadora",
+    lbl1: "Massa do Ventrículo Esquerdo (g)",
+    lbl1d: "Massa absoluta, sem indexação (método de Devereux).",
+    lbl2: "Dispersão Mecânica do VE (ms)",
+    lbl2d: "Desvio padrão do tempo ao pico do strain longitudinal.",
+    btn: "Calcular Risco",
+    reportTitle: "Texto sugerido para laudo:",
+    copyBtn: "Copiar texto para laudo",
+    h3: "Fundamentação Científica",
+    ref:
+      "Ribeiro, Luiz Carlos Madruga. Mecânica miocárdica avaliada por Speckle Tracking como marcador prognóstico na cardiomiopatia chagásica. Tese (Doutorado) – FMUSP, 2025. Orientadora: Profa. Dra. Ludhmila Abrahão Hajjar.",
+    ack:
+      "Agradecimentos: O autor agradece à Dra. Adenalva Lima de Souza Beck e à Profa. Dra. Ludhmila Abrahão Hajjar."
+  },
+  en: {
+    title: "Arrhythmic Risk Calculator in Chagas Disease",
+    subtitle: "Based on myocardial mechanics assessed by Speckle Tracking",
+    h1: "What is this calculator?",
+    desc:
+      "This calculator estimates, using a logistic regression model, the probability that a patient with Chagas disease presents a profile similar to ICD recipients for secondary prevention (arrhythmogenic substrate).",
+    warn:
+      "⚠️ Intended exclusively for patients with Chagas disease. Not a substitute for clinical judgment.",
+    h2: "Calculator",
+    lbl1: "Left Ventricular Mass (g)",
+    lbl1d: "Absolute LV mass, non-indexed (Devereux method).",
+    lbl2: "Left Ventricular Mechanical Dispersion (ms)",
+    lbl2d: "Standard deviation of time to peak longitudinal strain.",
+    btn: "Calculate Risk",
+    reportTitle: "Suggested report text:",
+    copyBtn: "Copy report text",
+    h3: "Scientific Background",
+    ref:
+      "Ribeiro, Luiz Carlos Madruga. Myocardial mechanics assessed by Speckle Tracking as a prognostic marker in Chagas cardiomyopathy. PhD Thesis – FMUSP, 2025. Supervisor: Prof. Ludhmila Abrahão Hajjar.",
+    ack:
+      "Acknowledgements: The author thanks Dr. Adenalva Lima de Souza Beck and Prof. Ludhmila Abrahão Hajjar."
+  }
+};
+
+function render(){
+  document.documentElement.lang = (lang === "pt") ? "pt-BR" : "en";
+  for (const k in T[lang]) {
+    const el = document.getElementById(k);
+    if (el) el.innerText = T[lang][k];
+  }
+}
+
+function toggleLang(){
+  lang = (lang === "pt") ? "en" : "pt";
+  render();
+  // se já tiver calculado, atualiza o texto de laudo no idioma atual
+  const lastP = window.__lastP;
+  if (typeof lastP === "number") updateReportText(lastP);
+}
+
 function calc(){
-  const m = parseFloat(massa.value);
-  const d = parseFloat(disp.value);
+  const m = parseFloat(document.getElementById("massa").value);
+  const d = parseFloat(document.getElementById("disp").value);
   if (isNaN(m) || isNaN(d)) return;
 
   const Z = -3.182 + 0.008 * m + 0.014 * d;
   const p = 1 / (1 + Math.exp(-Z));
+  window.__lastP = p;
+
   const val = p.toFixed(2);
+  const high = p >= 0.39;
 
-  result.innerHTML =
-    `Probabilidade estimada pelo modelo: 
-     <span class="${p >= 0.39 ? 'red' : 'green'}">${val}</span>`;
+  // 🔴 alto risco (>=0,39) | 🟢 menor risco (<0,39)
+  document.getElementById("result").innerHTML =
+    `${lang === "pt" ? "Probabilidade estimada pelo modelo" : "Model-estimated probability"}: 
+     <span class="${high ? "red" : "green"}">${val}</span>`;
 
-  chart.style.display = "block";
-  marker.style.left = (p * 100) + "%";
-  marker.style.background = p >= 0.39 ? "#b91c1c" : "#15803d";
+  document.getElementById("chart").style.display = "block";
+  document.getElementById("marker").style.left = (p * 100) + "%";
+  document.getElementById("marker").style.background = high ? "#b91c1c" : "#15803d";
 
-  interpret.innerText =
-    p >= 0.39
-    ? "Perfil compatível com substrato arritmogênico (cutoff 0,39 – sensibilidade 60,3%, especificidade 63,3%)."
-    : "Perfil menos frequentemente associado a substrato arritmogênico (cutoff 0,39).";
+  document.getElementById("interpret").innerText =
+    (lang === "pt")
+      ? (high
+          ? "Perfil compatível com substrato arritmogênico (cutoff 0,39 – sensibilidade 60,3%, especificidade 63,3%)."
+          : "Perfil menos frequentemente associado a substrato arritmogênico (cutoff 0,39).")
+      : (high
+          ? "Profile compatible with an arrhythmogenic substrate (cutoff 0.39 – sensitivity 60.3%, specificity 63.3%)."
+          : "Profile less frequently associated with an arrhythmogenic substrate (cutoff 0.39).");
 
   updateReportText(p);
 }
 
 function updateReportText(p){
   const value = p.toFixed(2);
+  const high = p >= 0.39;
 
-  reportText.innerText =
-`Realizado cálculo de risco arrítmico por regressão logística com probabilidade estimada de ${value}.
-${p >= 0.39
-  ? "Perfil compatível com substrato arritmogênico."
-  : "Perfil menos frequentemente associado a substrato arritmogênico (cutoff 0,39)."}
+  if (lang === "pt") {
+    document.getElementById("reportText").innerText =
+`Realizado cálculo de risco arrítmico por regressão logística (probabilidade ${value}).
+${high ? "Perfil compatível com substrato arritmogênico." : "Perfil menos frequentemente associado a substrato arritmogênico (cutoff 0,39)."}
 Modelo com sensibilidade de 60,3% e especificidade de 63,3%.
 Conforme Ribeiro, Luiz Carlos Madruga. Mecânica miocárdica avaliada por Speckle Tracking como marcador prognóstico na cardiomiopatia chagásica. Tese de Doutorado – FMUSP, 2025.`;
+  } else {
+    document.getElementById("reportText").innerText =
+`Arrhythmic risk estimated by logistic regression (probability ${value}).
+${high ? "Profile compatible with an arrhythmogenic substrate." : "Profile less frequently associated with an arrhythmogenic substrate (cutoff 0.39)."}
+Model sensitivity 60.3% and specificity 63.3%.
+According to Ribeiro, Luiz Carlos Madruga. Myocardial mechanics assessed by Speckle Tracking as a prognostic marker in Chagas cardiomyopathy. PhD Thesis – FMUSP, 2025.`;
+  }
 
-  reportBox.style.display = "block";
+  document.getElementById("reportBox").style.display = "block";
 }
 
 function copyReport(){
-  navigator.clipboard.writeText(reportText.innerText)
-    .then(() => alert("Texto copiado para a área de transferência."));
+  navigator.clipboard.writeText(document.getElementById("reportText").innerText)
+    .then(() => alert(lang === "pt" ? "Texto copiado para a área de transferência." : "Copied to clipboard."));
 }
+
+render();
 </script>
 
 </body>
