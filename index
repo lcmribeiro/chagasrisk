@@ -2,162 +2,57 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Calculadora de Risco Arrítmico – Doença de Chagas</title>
+<title>Ferramenta de Estimativa de Associação a Substrato Arritmogênico</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
 
 <style>
-body{
-  font-family:'Inter',sans-serif;
-  background:#f5f7fa;
-  margin:0;
-  color:#1f2933;
-}
-header{
-  background:#0f172a;
-  color:#fff;
-  padding:30px;
-  text-align:center;
-  position:relative;
-}
-header h1{
-  font-family:'Playfair Display',serif;
-  margin-bottom:6px;
-}
-.lang-btn{
-  position:absolute;
-  top:20px;
-  right:20px;
-  background:#2563eb;
-  border:none;
-  color:#fff;
-  padding:8px 12px;
-  cursor:pointer;
-}
-main{
-  max-width:900px;
-  margin:auto;
-  background:#fff;
-  padding:40px 20px;
-}
-h2{
-  margin-top:40px;
-  border-bottom:2px solid #e5e7eb;
-}
-.box{
-  background:#f1f5f9;
-  border-left:5px solid #dc2626;
-  padding:15px;
-  margin:20px 0;
-}
-label{font-weight:600;display:block;margin-top:15px;}
-small{color:#475569;font-size:13px;}
-input{
-  width:100%;
-  padding:10px;
-  font-size:16px;
-}
-button.calc{
-  margin-top:20px;
-  width:100%;
-  padding:14px;
-  background:#2563eb;
-  color:#fff;
-  border:none;
-  font-size:16px;
-  cursor:pointer;
-}
-.result{
-  margin-top:25px;
-  font-size:26px;
-  font-weight:700;
-}
-.green{color:#15803d;} /* menor risco */
-.red{color:#b91c1c;}   /* maior risco */
+body{font-family:'Inter',sans-serif;background:#f5f7fa;margin:0;color:#1f2933;}
+header{background:#0f172a;color:#fff;padding:30px;text-align:center;position:relative;}
+header h1{font-family:'Playfair Display',serif;margin-bottom:6px;}
+.lang-btn{position:absolute;top:20px;right:20px;background:#2563eb;border:none;color:#fff;padding:8px 12px;cursor:pointer;}
+main{max-width:900px;margin:auto;background:#fff;padding:40px 20px;}
+h2{margin-top:40px;border-bottom:2px solid #e5e7eb;}
+.box{background:#f1f5f9;border-left:5px solid #dc2626;padding:15px;margin:20px 0;}
+label{font-weight:600;margin-top:15px;display:block;}
+small{color:#475569;}
+input{width:100%;padding:10px;font-size:16px;}
+button.calc{margin-top:20px;width:100%;padding:14px;background:#2563eb;color:#fff;border:none;font-size:16px;cursor:pointer;}
+.result{margin-top:25px;font-size:26px;font-weight:700;}
+.green{color:#15803d;}
+.red{color:#b91c1c;}
 
 .chart{margin-top:25px;display:none;}
-.bar{
-  position:relative;
-  height:18px;
-  background:linear-gradient(
-    to right,
-    #bbf7d0 0%,
-    #bbf7d0 39%,
-    #fecaca 39%,
-    #fecaca 100%
-  );
-  border-radius:6px;
-}
-.cutoff{
-  position:absolute;
-  left:39%;
-  top:-6px;
-  width:2px;
-  height:30px;
-  background:#dc2626;
-}
-.marker{
-  position:absolute;
-  top:-6px;
-  width:12px;
-  height:12px;
-  border-radius:50%;
-  transform:translateX(-50%);
-}
+.bar{position:relative;height:18px;border-radius:6px;
+background:linear-gradient(to right,#bbf7d0 0%,#bbf7d0 39%,#fecaca 39%,#fecaca 100%);}
+.cutoff{position:absolute;left:39%;top:-6px;width:2px;height:30px;background:#dc2626;}
+.marker{position:absolute;top:-6px;width:12px;height:12px;border-radius:50%;transform:translateX(-50%);}
 
-.interpret{
-  margin-top:20px;
-  padding:15px;
-  border-left:5px solid #2563eb;
-  background:#f8fafc;
-}
+.metrics{margin-top:20px;border-collapse:collapse;width:100%;font-size:14px;}
+.metrics td{padding:8px;border-bottom:1px solid #e5e7eb;}
 
-.report{
-  margin-top:20px;
-  padding:15px;
-  border-left:5px solid #0f172a;
-  background:#f8fafc;
-}
-.report p{
-  font-size:14px;
-  line-height:1.5;
-  margin-top:10px;
-  white-space:pre-line;
-}
+.report{margin-top:20px;padding:15px;border-left:5px solid #0f172a;background:#f8fafc;}
+.report p{white-space:pre-line;font-size:14px;}
 
-.ack{
-  margin-top:20px;
-  padding:15px;
-  border-left:5px solid #0f172a;
-  background:#f8fafc;
-  font-style:italic;
-}
+.ack{margin-top:20px;padding:15px;border-left:5px solid #0f172a;background:#f8fafc;font-style:italic;}
 
-footer{
-  text-align:center;
-  padding:20px;
-  font-size:14px;
-  color:#475569;
-}
+footer{text-align:center;padding:20px;font-size:14px;color:#475569;}
 </style>
 </head>
 
 <body>
 
 <header>
-  <button class="lang-btn" onclick="toggleLang()">EN / PT</button>
-  <h1 id="title"></h1>
-  <p id="subtitle"></p>
+<button class="lang-btn" onclick="toggleLang()">EN / PT</button>
+<h1 id="title"></h1>
+<p id="subtitle"></p>
 </header>
 
 <main>
 
 <h2 id="h1"></h2>
 <p id="desc"></p>
-
 <div class="box" id="warn"></div>
 
 <h2 id="h2"></h2>
@@ -175,18 +70,18 @@ footer{
 <div class="result" id="result"></div>
 
 <div class="chart" id="chart">
-  <div class="bar">
-    <div class="cutoff" title="Cutoff 0,39"></div>
-    <div class="marker" id="marker"></div>
-  </div>
+<div class="bar">
+<div class="cutoff"></div>
+<div class="marker" id="marker"></div>
+</div>
 </div>
 
-<div class="interpret" id="interpret"></div>
+<table class="metrics" id="metrics" style="display:none;"></table>
 
 <div class="report" id="reportBox" style="display:none;">
-  <strong id="reportTitle"></strong>
-  <p id="reportText"></p>
-  <button class="calc" onclick="copyReport()" id="copyBtn"></button>
+<strong id="reportTitle"></strong>
+<p id="reportText"></p>
+<button class="calc" onclick="copyReport()" id="copyBtn"></button>
 </div>
 
 <h2 id="h3"></h2>
@@ -201,126 +96,101 @@ footer{
 <script>
 let lang="pt";
 
-const T = {
-  pt: {
-    title: "Calculadora de Risco Arrítmico na Doença de Chagas",
-    subtitle: "Baseada em mecânica miocárdica por Speckle Tracking",
-    h1: "O que é esta calculadora?",
-    desc:
-      "Esta calculadora estima a probabilidade, pelo modelo de regressão logística, de um paciente com Doença de Chagas apresentar perfil semelhante ao de pacientes com CDI em prevenção secundária (substrato arritmogênico).",
-    warn:
-      "⚠️ Aplicável exclusivamente a pacientes com Doença de Chagas. Não substitui julgamento clínico.",
-    h2: "Calculadora",
-    lbl1: "Massa do Ventrículo Esquerdo (g)",
-    lbl1d: "Massa absoluta, sem indexação (método de Devereux).",
-    lbl2: "Dispersão Mecânica do VE (ms)",
-    lbl2d: "Desvio padrão do tempo ao pico do strain longitudinal.",
-    btn: "Calcular Risco",
-    reportTitle: "Texto sugerido para laudo:",
-    copyBtn: "Copiar texto para laudo",
-    h3: "Fundamentação Científica",
-    ref:
-      "Ribeiro, Luiz Carlos Madruga. Mecânica miocárdica avaliada por Speckle Tracking como marcador prognóstico na cardiomiopatia chagásica. Tese (Doutorado) – FMUSP, 2025. Orientadora: Profa. Dra. Ludhmila Abrahão Hajjar.",
-    ack:
-      "Agradecimentos: O autor agradece à Dra. Adenalva Lima de Souza Beck e à Profa. Dra. Ludhmila Abrahão Hajjar."
-  },
-  en: {
-    title: "Arrhythmic Risk Calculator in Chagas Disease",
-    subtitle: "Based on myocardial mechanics assessed by Speckle Tracking",
-    h1: "What is this calculator?",
-    desc:
-      "This calculator estimates, using a logistic regression model, the probability that a patient with Chagas disease presents a profile similar to ICD recipients for secondary prevention (arrhythmogenic substrate).",
-    warn:
-      "⚠️ Intended exclusively for patients with Chagas disease. Not a substitute for clinical judgment.",
-    h2: "Calculator",
-    lbl1: "Left Ventricular Mass (g)",
-    lbl1d: "Absolute LV mass, non-indexed (Devereux method).",
-    lbl2: "Left Ventricular Mechanical Dispersion (ms)",
-    lbl2d: "Standard deviation of time to peak longitudinal strain.",
-    btn: "Calculate Risk",
-    reportTitle: "Suggested report text:",
-    copyBtn: "Copy report text",
-    h3: "Scientific Background",
-    ref:
-      "Ribeiro, Luiz Carlos Madruga. Myocardial mechanics assessed by Speckle Tracking as a prognostic marker in Chagas cardiomyopathy. PhD Thesis – FMUSP, 2025. Supervisor: Prof. Ludhmila Abrahão Hajjar.",
-    ack:
-      "Acknowledgements: The author thanks Dr. Adenalva Lima de Souza Beck and Prof. Ludhmila Abrahão Hajjar."
-  }
+const stats = {
+auc:"0.65",
+cutoff:"0.39",
+sens:"60.3%",
+spec:"63.3%",
+ppv:"53.5%",
+npv:"69.5%",
+acc:"62.1%"
+};
+
+const T={
+pt:{
+title:"Ferramenta de Estimativa de Associação a Substrato Arritmogênico",
+subtitle:"Modelo transversal baseado em mecânica miocárdica por Speckle Tracking",
+h1:"Sobre esta ferramenta",
+desc:"Modelo de regressão logística derivado de estudo transversal para estimativa de associação a perfil semelhante a CDI em prevenção secundária.",
+warn:"⚠️ Aplicável exclusivamente a pacientes com Doença de Chagas.",
+h2:"Estimativa",
+lbl1:"Massa do Ventrículo Esquerdo (g)",
+lbl1d:"Massa absoluta, sem indexação (método de Devereux).",
+lbl2:"Dispersão Mecânica do VE (ms)",
+lbl2d:"Desvio padrão do tempo ao pico do strain longitudinal.",
+btn:"Estimar",
+reportTitle:"Texto sugerido para laudo:",
+copyBtn:"Copiar texto",
+h3:"Fundamentação Científica",
+ref:"Ribeiro, Luiz Carlos Madruga. Mecânica miocárdica avaliada por Speckle Tracking como marcador prognóstico na cardiomiopatia chagásica. Tese (Doutorado) – FMUSP, 2025. Orientadora: Profa. Dra. Ludhmila Abrahão Hajjar.",
+ack:"Agradecimentos: O autor agradece à Dra. Adenalva Lima de Souza Beck e à Profa. Dra. Ludhmila Abrahão Hajjar pelo apoio científico e contribuição intelectual neste projeto."
+},
+en:{
+title:"Tool for Estimating Association with Arrhythmogenic Substrate",
+subtitle:"Cross-sectional model based on myocardial mechanics by Speckle Tracking",
+h1:"About this tool",
+desc:"Logistic regression model derived from a cross-sectional study to estimate association with a profile similar to secondary prevention ICD patients.",
+warn:"⚠️ Intended exclusively for Chagas disease patients.",
+h2:"Estimation",
+lbl1:"Left Ventricular Mass (g)",
+lbl1d:"Absolute LV mass, non-indexed (Devereux method).",
+lbl2:"Left Ventricular Mechanical Dispersion (ms)",
+lbl2d:"Standard deviation of time-to-peak longitudinal strain.",
+btn:"Estimate",
+reportTitle:"Suggested report text:",
+copyBtn:"Copy text",
+h3:"Scientific Background",
+ref:"Ribeiro, Luiz Carlos Madruga. Myocardial mechanics assessed by Speckle Tracking as a prognostic marker in Chagas cardiomyopathy. PhD Thesis – FMUSP, 2025.",
+ack:"Acknowledgements: The author thanks Dr. Adenalva Lima de Souza Beck and Prof. Ludhmila Abrahão Hajjar for scientific support and intellectual contribution to this project."
+}
 };
 
 function render(){
-  document.documentElement.lang = (lang === "pt") ? "pt-BR" : "en";
-  for (const k in T[lang]) {
-    const el = document.getElementById(k);
-    if (el) el.innerText = T[lang][k];
-  }
+for(const k in T[lang]){
+const el=document.getElementById(k);
+if(el) el.innerText=T[lang][k];
 }
-
-function toggleLang(){
-  lang = (lang === "pt") ? "en" : "pt";
-  render();
-  // se já tiver calculado, atualiza o texto de laudo no idioma atual
-  const lastP = window.__lastP;
-  if (typeof lastP === "number") updateReportText(lastP);
 }
+function toggleLang(){lang=lang==="pt"?"en":"pt";render();}
 
 function calc(){
-  const m = parseFloat(document.getElementById("massa").value);
-  const d = parseFloat(document.getElementById("disp").value);
-  if (isNaN(m) || isNaN(d)) return;
+const m=+massa.value,d=+disp.value;
+if(!m||!d) return;
 
-  const Z = -3.182 + 0.008 * m + 0.014 * d;
-  const p = 1 / (1 + Math.exp(-Z));
-  window.__lastP = p;
+const p=1/(1+Math.exp(-(-3.182+0.008*m+0.014*d)));
+const high=p>=0.39;
+const val=p.toFixed(2);
 
-  const val = p.toFixed(2);
-  const high = p >= 0.39;
+result.innerHTML=`${lang==="pt"?"Probabilidade estimada":"Estimated probability"}: <span class="${high?"red":"green"}">${val}</span>`;
 
-  // 🔴 alto risco (>=0,39) | 🟢 menor risco (<0,39)
-  document.getElementById("result").innerHTML =
-    `${lang === "pt" ? "Probabilidade estimada pelo modelo" : "Model-estimated probability"}: 
-     <span class="${high ? "red" : "green"}">${val}</span>`;
+chart.style.display="block";
+marker.style.left=(p*100)+"%";
+marker.style.background=high?"#b91c1c":"#15803d";
 
-  document.getElementById("chart").style.display = "block";
-  document.getElementById("marker").style.left = (p * 100) + "%";
-  document.getElementById("marker").style.background = high ? "#b91c1c" : "#15803d";
+metrics.style.display="table";
+metrics.innerHTML=`
+<tr><td>AUC (ROC)</td><td>${stats.auc}</td></tr>
+<tr><td>Cutoff</td><td>${stats.cutoff}</td></tr>
+<tr><td>${lang==="pt"?"Sensibilidade":"Sensitivity"}</td><td>${stats.sens}</td></tr>
+<tr><td>${lang==="pt"?"Especificidade":"Specificity"}</td><td>${stats.spec}</td></tr>
+<tr><td>${high?(lang==="pt"?"VPP":"PPV"):(lang==="pt"?"VPN":"NPV")}</td><td>${high?stats.ppv:stats.npv}</td></tr>
+<tr><td>${lang==="pt"?"Acurácia":"Accuracy"}</td><td>${stats.acc}</td></tr>`;
 
-  document.getElementById("interpret").innerText =
-    (lang === "pt")
-      ? (high
-          ? "Perfil compatível com substrato arritmogênico (cutoff 0,39 – sensibilidade 60,3%, especificidade 63,3%)."
-          : "Perfil menos frequentemente associado a substrato arritmogênico (cutoff 0,39).")
-      : (high
-          ? "Profile compatible with an arrhythmogenic substrate (cutoff 0.39 – sensitivity 60.3%, specificity 63.3%)."
-          : "Profile less frequently associated with an arrhythmogenic substrate (cutoff 0.39).");
-
-  updateReportText(p);
-}
-
-function updateReportText(p){
-  const value = p.toFixed(2);
-  const high = p >= 0.39;
-
-  if (lang === "pt") {
-    document.getElementById("reportText").innerText =
-`Realizado cálculo de risco arrítmico por regressão logística (probabilidade ${value}).
-${high ? "Perfil compatível com substrato arritmogênico." : "Perfil menos frequentemente associado a substrato arritmogênico (cutoff 0,39)."}
-Modelo com sensibilidade de 60,3% e especificidade de 63,3%.
-Conforme Ribeiro, Luiz Carlos Madruga. Mecânica miocárdica avaliada por Speckle Tracking como marcador prognóstico na cardiomiopatia chagásica. Tese de Doutorado – FMUSP, 2025.`;
-  } else {
-    document.getElementById("reportText").innerText =
-`Arrhythmic risk estimated by logistic regression (probability ${value}).
-${high ? "Profile compatible with an arrhythmogenic substrate." : "Profile less frequently associated with an arrhythmogenic substrate (cutoff 0.39)."}
-Model sensitivity 60.3% and specificity 63.3%.
-According to Ribeiro, Luiz Carlos Madruga. Myocardial mechanics assessed by Speckle Tracking as a prognostic marker in Chagas cardiomyopathy. PhD Thesis – FMUSP, 2025.`;
-  }
-
-  document.getElementById("reportBox").style.display = "block";
+reportBox.style.display="block";
+reportText.innerText=
+lang==="pt"?
+`Estimativa por regressão logística (p=${val}).
+${high?"Perfil compatível com substrato arritmogênico.":"Perfil menos frequentemente associado a substrato arritmogênico (cutoff 0,39)."}
+Sensibilidade ${stats.sens}, especificidade ${stats.spec}, ${high?"VPP":"VPN"} ${high?stats.ppv:stats.npv}, acurácia ${stats.acc}.
+Conforme Ribeiro, Luiz Carlos Madruga. Tese de Doutorado – FMUSP, 2025.`:
+`Logistic regression estimate (p=${val}).
+${high?"Compatible with arrhythmogenic substrate.":"Less frequently associated with arrhythmogenic substrate (cutoff 0.39)."}
+Sensitivity ${stats.sens}, specificity ${stats.spec}, ${high?"PPV":"NPV"} ${high?stats.ppv:stats.npv}, accuracy ${stats.acc}.
+According to Ribeiro, Luiz Carlos Madruga. PhD Thesis – FMUSP, 2025.`;
 }
 
 function copyReport(){
-  navigator.clipboard.writeText(document.getElementById("reportText").innerText)
-    .then(() => alert(lang === "pt" ? "Texto copiado para a área de transferência." : "Copied to clipboard."));
+navigator.clipboard.writeText(reportText.innerText);
 }
 
 render();
